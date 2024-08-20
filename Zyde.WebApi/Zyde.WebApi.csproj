@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Coffee.NetCore" Version="0.0.22" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Zyde.Application\Zyde.Application.csproj" />
+    <ProjectReference Include="..\Zyde.Infrastructure\Zyde.Infrastructure.csproj" />
+  </ItemGroup>
+  
+</Project>
