@@ -5,6 +5,7 @@ using Coffee.WebApi;
 using Coffee.Application.Configurations;
 using Zyde.Application.Protocols;
 using Zyde.WebApi.BackgroundServices;
+using StackExchange.Redis;
 
 namespace Zyde.WebApi;
 
@@ -35,9 +36,15 @@ public sealed class Startup
         // Register the hosted service
         services.AddHostedService<ProtocolListenerHostedService>();
 
+         services.AddSingleton<IConnectionMultiplexer>(sp =>
+        {
+            var configurationOptions = appSettings.ConnectionStrings.RedisConnection;
+            return ConnectionMultiplexer.Connect(configurationOptions);
+        });
+
         services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = "localhost:6379";
+            options.Configuration = appSettings.ConnectionStrings.RedisConnection;
             options.InstanceName = "zyde";
         });
     }

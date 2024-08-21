@@ -1,5 +1,6 @@
 using Coffee.Model;
 using Coffee.Model.DapperAttributes;
+using Newtonsoft.Json;
 
 namespace Zyde.Model;
 
@@ -29,5 +30,24 @@ public sealed class Position : CoffeeModel
         Attributes = ValidateNullOrEmpty(Attributes, "Position.Attributes");
         Device = ValidateNull(Device, "Position.Device");
         return true;
+    }
+
+    public T GetAttribute<T>(string attributeName)
+    {
+        if (string.IsNullOrEmpty(Attributes))
+        {
+            return default;
+        }
+
+        // Deserialize the attributes JSON into a dictionary
+        var attributes = JsonConvert.DeserializeObject<Dictionary<string, T>>(Attributes);
+
+        // Return the attribute value if it exists in the dictionary
+        if (attributes != null && attributes.TryGetValue(attributeName, out var value))
+        {
+            return value;
+        }
+
+        return default;
     }
 }

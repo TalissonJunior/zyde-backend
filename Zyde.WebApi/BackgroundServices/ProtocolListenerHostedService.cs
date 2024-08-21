@@ -8,8 +8,8 @@ public class ProtocolListenerHostedService : IHostedService
     private readonly ILogger<ProtocolListenerHostedService> _logger;
 
     public ProtocolListenerHostedService(
-        ProtocolListener protocolListener, 
-        ILogger<ProtocolListenerHostedService> logger
+        ProtocolListener protocolListener,
+        ILogger<ProtocolListenerHostedService> logger // Inject ILogger
     )
     {
         _protocolListener = protocolListener;
@@ -20,18 +20,14 @@ public class ProtocolListenerHostedService : IHostedService
     {
         _logger.LogInformation("🚀 [Protocol Listener] Starting...");
 
-        // You can start listening here
-        await Task.Run(() => _protocolListener.ProcessFileDataAsync("raw_gps_data.txt"), cancellationToken);
-
-        _logger.LogInformation("✅ [Protocol Listener] Successfully started and processing data from 'raw_gps_data.txt'.");
+        // Development purpose
+        //await Task.Run(() => _protocolListener.ProcessFileDataAsync("raw_gps_data.txt"), cancellationToken);
+        await Task.Run(() => _protocolListener.ListenOnPorts());
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("🛑 [Protocol Listener] Stopping...");
-        
-        // Handle any cleanup if necessary
-
         _logger.LogInformation("🔒 [Protocol Listener] Successfully stopped.");
         return Task.CompletedTask;
     }

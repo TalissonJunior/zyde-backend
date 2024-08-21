@@ -14,6 +14,12 @@ public static class Program
    
     private static IHostBuilder CreateHostBuilder(string[] args) {
         return Host.CreateDefaultBuilder(args)
+        .ConfigureLogging(logging =>
+        {
+            logging.ClearProviders(); // Optional: clear default providers
+            logging.AddConsole();
+            logging.AddFile("Logs/app.log"); // Log to a file
+        })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .ConfigureWebHostDefaults(webBuilder => { 
             webBuilder
