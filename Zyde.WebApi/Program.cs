@@ -1,5 +1,6 @@
 using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
+using Coffee.WebApi;
 
 namespace Zyde.WebApi;
 
@@ -10,11 +11,13 @@ public static class Program
         CreateHostBuilder(args).Build().Run();
     }
 
+   
     private static IHostBuilder CreateHostBuilder(string[] args) {
         return Host.CreateDefaultBuilder(args)
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .ConfigureWebHostDefaults(webBuilder => { 
             webBuilder
+            .CoffeeUseUrl(args)
             .UseStartup<Startup>()
             .UseKestrel(options =>
             {
@@ -28,9 +31,9 @@ public static class Program
         .ConfigureAppConfiguration((builderContext, config) =>
         {
             config
+            .EnableDefaults()
             .SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location))
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile("appsettings.Development.json", optional: false)
             .AddEnvironmentVariables();
         })
         .ConfigureServices(services => services.AddAutofac());

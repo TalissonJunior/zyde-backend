@@ -1,11 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Zyde.Model;
 
 namespace Zyde.Infrastructure.EntityFrameworkDataAccess;
 
 public class Context : DbContext
 {
     private string ConnectionString { get; set; }
+    public virtual DbSet<Device> Devices { get; set; }
+    public virtual DbSet<Position> Positions { get; set; }
+    public virtual DbSet<Address> Addresses { get; set; }
+    public virtual DbSet<PositionEvent> PositionEvents { get; set; }
+    public virtual DbSet<Simcard> Simcards { get; set; }
+    public virtual DbSet<SimcardSubscription> SimcardSubscriptions { get; set; }
 
     public Context() { }
 

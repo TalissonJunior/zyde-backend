@@ -1,8 +1,10 @@
 using Zyde.Application.Configurations;
-using Zyde.WebApi.Extensions;
 using Autofac;
 using Zyde.Application.Configurations.Mapper;
 using Coffee.WebApi;
+using Coffee.Application.Configurations;
+using Zyde.Application.Protocols;
+using Zyde.WebApi.BackgroundServices;
 
 namespace Zyde.WebApi;
 
@@ -21,12 +23,23 @@ public sealed class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services
-            .Configure<AppSettings>(appSettingsSection)
-            .AddSwagger(appSettings)
-            .AddControllers();
+        services.Configure<AppSettings>(appSettingsSection);
+        services.Configure<CoffeeAppSettings>(appSettingsSection);
+        services.AddControllers();
 
-        services.AddEmails();
+        services.AddDefaults(appSettings);
+
+        // Register ProtocolListener
+        services.AddSingleton<ProtocolListener>();
+
+        // Register the hosted service
+        services.AddHostedService<ProtocolListenerHostedService>();
+
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = "localhost:6379";
+            options.InstanceName = "zyde";
+        });
     }
 
     public void ConfigureContainer(ContainerBuilder builder)
@@ -47,12 +60,10 @@ public sealed class Startup
             .ConfigureSwagger()
             .UseDeveloperExceptionPage();
         }
+        
+        app.UseDefaults(appSettings, env);
 
         app
-        .UseHttpsRedirection()
-        .UseRouting()
-        .ConfigureCors(appSettings)
-        .ConfigureLogs()
         .UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();

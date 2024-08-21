@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
-    <PackageReference Include="Coffee.NetCore" Version="0.0.22" />
+    <PackageReference Include="Coffee.NetCore" Version="1.7.4" />
   </ItemGroup>
 
 </Project>
